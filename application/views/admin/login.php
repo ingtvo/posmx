@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Login</title>
+  <title>POSMX - Login</title>
 
   <!-- Custom fonts for this template-->
   <link href="<?php echo base_url().'assets/' ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,34 +23,35 @@
 
   <div class="container">
     <div class="card card-login mx-auto mt-5">
-      <div class="card-header">Login</div>
+      <div class="card-header">Ingresar</div>
       <div class="card-body">
         <form>
           <div class="form-group">
             <div class="form-label-group">
               <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-              <label for="inputEmail">Email address</label>
+              <label for="inputEmail">Correo electrónico</label>
             </div>
           </div>
           <div class="form-group">
             <div class="form-label-group">
               <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-              <label for="inputPassword">Password</label>
+              <label for="inputPassword">Contraseña</label>
             </div>
           </div>
           <div class="form-group">
             <div class="checkbox">
               <label>
                 <input type="checkbox" value="remember-me">
-                Remember Password
+                Rescordar contraseña
               </label>
             </div>
           </div>
-          <a class="btn btn-primary btn-block" href="index.html">Login</a>
+          <a class="btn btn-primary btn-block" href="index.html">Ingresar</a>
         </form>
         <div class="text-center">
-          <a class="d-block small mt-3" href="register.html">Register an Account</a>
-          <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
+          <a class="d-block small mt-3" href="register.html">Registrar una cuenta</a>
+          <a class="d-block small" href="forgot-password.html">¿Olvidaste tú contraseña?</a>
+          <a class="d-block small" href="<?php echo base_url()?>">Inicio</a>
         </div>
       </div>
     </div>
