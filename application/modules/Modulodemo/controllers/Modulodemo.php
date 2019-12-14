@@ -29,19 +29,18 @@ class Modulodemo extends MX_Controller {
 
 
 	public function listaUsuarios()
-	{
+	{/*
 		$this->load->library('Demo/LibDemo');
 		$data = $this->libdemo->listaUsuarios();
 
+*/
 
 
-
-
-		//$this->load->model('Modulo/ModUsuarios');
-		//$lista = $this->ModUsuarios->listaUsuarios();
-
-
-		//var_dump($data);
+		
+		$this->load->model('ModUsuarios');
+		$lista = $this->ModUsuarios->listaUsuarios();
+		var_dump($lista);
+	
 	}
 
 
