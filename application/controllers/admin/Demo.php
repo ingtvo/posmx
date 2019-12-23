@@ -17,7 +17,13 @@ class Demo extends CI_Controller {
 
 	public function index()
 	{
+		$this->load->library('Sistema/LibSeguridad');
+		$encriptado = $this->libseguridad->dataEncriptaDatos('2006301487');
+		echo 'encriptado: '.$encriptado.'<br><hr>';
+		$desencriptado = $this->libseguridad->desEcnciptaDatos('7963b824ff8ee6cc941be638a1e581ef4da2a55adb4e67e62f769f4ad64172ec71ef379739e2f23536ee96d09bdd58c6aaba0dfc7bc4b2fbfbfeb730c181562bCvSROJVdKAHSzoyQ4sv+wI/0szd3Vr4I');
+		echo 'desencriptado: '.$desencriptado.'<br>';
 
+/*
 		$this->output->enable_profiler(TRUE);
 		$this->load->view('admin/header');
 		$this->load->view('admin/demo/dashboard');
@@ -25,6 +31,7 @@ class Demo extends CI_Controller {
 		$this->load->view('admin/footerTop');
 		$this->load->view('admin/js/jsDashboard');
 		$this->load->view('admin/footerBottom');
+		*/
 	}
 
 	public function blank()

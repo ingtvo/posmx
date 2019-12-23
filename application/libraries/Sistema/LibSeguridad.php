@@ -60,7 +60,7 @@ class LibSeguridad {
     * @param [datos] arreglo de datos a cifrar
     * @return array
     */
-	public function dataEncriptados($info)
+	public function dataEncriptaDatos($info)
 	{
 		$data = json_encode($info);
 		
@@ -83,7 +83,14 @@ class LibSeguridad {
     * @param [clave] cadena con datos encriptados
     */
 	public function desEcnciptaDatos($datos)
-	{		
+	{	
+		$this->ci->encryption->initialize(
+		array(
+				'cipher' => 'aes-128',
+				'mode' => 'ctr',
+				'key' => $this->clavePublica
+			)
+		);	
 		$result=$this->ci->encryption->decrypt($datos);
 		if($result){
 			return $result;	

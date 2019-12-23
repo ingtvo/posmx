@@ -26,6 +26,7 @@
       <div class="card-header">Registro</div>
       <div class="card-body">
         <?php echo validation_errors('<div class="alert alert-danger" role="alert">','</div>')?>
+        <?php echo (!empty($error) && $error != null)?'<div class="alert alert-danger" role="alert">'.$error.'</div>':''?>
 
         <?php echo form_open(base_url("acceso/registrarUsuario"))?>
           <form class="needs-validation" novalidate="">
@@ -75,20 +76,20 @@
                     La contraseña de usuario es requerida.
                   </div>
                 </div>
-              </div>            
+              </div>
 
               <div class="col-md-4 mb-3">
-                <label for="contrasena2">Confirmar contraseña</label>
+                <?php echo form_label("Confirmar contraseña", "contrasena2")?>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text">@</span>
-                  </div>
-                  <input type="password" class="form-control" id="contrasena2" placeholder="Username" required="">
+                  </div>                                    
+                    <?php echo form_input($regitems["contrasena2"])?>
                   <div class="invalid-feedback" style="width: 100%;">
                     Re escriba la de usuario es requerido.
                   </div>
                 </div>
-              </div>
+              </div>                
             </div><!-- fin del row-->
 <!--
             <hr class="mb-4">

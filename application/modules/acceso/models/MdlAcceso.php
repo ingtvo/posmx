@@ -1,29 +1,39 @@
 <?php
+/**
+* @copyright POS-MX-ESIME
+* @package  CodeIgniter
+* @subpackage  IPN
+* @category model
+*/
+
 //Se evita que alguien ejecute directamente el script
 if(!defined('BASEPATH')) exit('No se permite el acceso directo al script');
 /**
 * @copyright
 * @package CodeIgniter
 * @category Model
-* @uses Lectura de los datos para identificar a los cursos asi como
-*       su contenido interno
+* @uses 
 */
 
 class MdlAcceso extends CI_Model{
     /**
-    * @author 
-    * @todo Constructor de clase
+    * @author Gustavo Pérez Cruz
     * @uses CI_Controller::__construct() para inicializar los métodos y atributos de la clase padre.
     */
 	function __construct() {
 		parent::__construct();
     }
 
-
+    /**
+    * @author Gustavo Pérez Cruz
+    * @uses Busca al usuario por correo
+    * @param Recibe correo y contraseña para buscar al usuario
+    * @return array de los campos de la consulta
+    */
     public function buscarUsuario($correo, $contrasena){
 
         $lectura = $this->load->database('default', TRUE);
-        $lectura->select('id_usuario,correo_electronico,password, nombre');
+        $lectura->select('id_usuario,correo_electronico,password, nombres');
         $lectura->from('usuario');
         $lectura->where('correo_electronico',$correo);
         $query = $lectura->get();
@@ -37,7 +47,7 @@ class MdlAcceso extends CI_Model{
                 'id_usuario'=>$row->id_usuario,
                 'correo'=>$row->correo_electronico,
                 'contrasena'=>$row->password,
-                'nombre'=>$row->nombre
+                'nombres'=>$row->nombres
             ];           
 
             return $tmp;
@@ -46,20 +56,31 @@ class MdlAcceso extends CI_Model{
             return null;
     }
 
-
+    /**
+    * @author Gustavo Pérez Cruz
+    * @uses Registra al usuario
+    * @param array con los datos del usuario a registrar
+    * @return id del usuario registrado
+    */
     public function registrarUsuario($datos){
+        //Selecciona la base de datos a consultar <<default>>
         $lectura = $this->load->database('default', TRUE);
         if(!$lectura->insert('usuario',$datos)){
-            $r = 0;
+            $tmp = 0;
         }
         else{
-            $r = $lectura->insert_id();
+            $tmp = $lectura->insert_id();
         }
         $lectura->close();
-        return $r;
+        return $tmp;
     }
 
-
+    /**
+    * @author Gustavo Pérez Cruz
+    * @uses Registra al usuario
+    * @param array con los datos del usuario a registrar
+    * @return id del usuario registrado
+    */
     public function listaUsuarios()
     {
         $lectura = $this->load->database('default', TRUE);
@@ -67,7 +88,6 @@ class MdlAcceso extends CI_Model{
         $lectura->from('usuario');
         $lectura->order_by('id_usuario', 'ASC');
         $query = $lectura->get();
-
         $lectura->close();
 
         $arreglo = [];
@@ -78,7 +98,7 @@ class MdlAcceso extends CI_Model{
                 $tmp[$row->id_usuario]['idusuario']=$row->id_usuario;
                 $tmp[$row->id_usuario]['correo']=$row->correo_electronico;
                 $tmp[$row->id_usuario]['password']=$row->password;
-                $tmp[$row->id_usuario]['password']=$row->nombre;
+                $tmp[$row->id_usuario]['nombres']=$row->nombre;
             }
 
             return $tmp;

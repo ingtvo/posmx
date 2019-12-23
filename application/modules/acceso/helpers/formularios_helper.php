@@ -11,7 +11,6 @@ function logitems(){
 				'type' => 'email',				
 				'id' => 'correo',
 				'name' => 'correo',
-				'value' => 'Correo Electrónico',
 				'class' => 'form-control',
 				'placeholder' => 'Correo Electrónico',
 				'required' => 'required',
@@ -66,7 +65,6 @@ function regitems(){
 				'type' => 'email',				
 				'id' => 'correo',
 				'name' => 'correo',
-				'value' => 'Correo Electrónico',
 				'class' => 'form-control',
 				'placeholder' => 'Correo Electrónico',
 				'required' => 'required',
@@ -79,11 +77,17 @@ function regitems(){
  				'class' => 'form-control',
  				'placeholder' => 'contraseña',
  			),
+ 			'contrasena2' => array( 				
+				'type' => 'password',
+ 				'id' => 'contrasena2',
+ 				'name' => 'contrasena2',
+ 				'class' => 'form-control',
+ 				'placeholder' => 'contraseña',
+ 			),
  			'registrar' => array( 				
 				'type' => 'submit',
 				'value' => 'Registrarme',
- 				'class' => 'btn btn-primary btn-lg btn-block',
- 				
+ 				'class' => 'btn btn-primary btn-lg btn-block', 				
  			),
 		);
 	}

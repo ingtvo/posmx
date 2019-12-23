@@ -26,6 +26,7 @@
       <div class="card-header">Ingresar</div>
       <div class="card-body">
         <?php echo validation_errors('<div class="alert alert-danger" role="alert">','</div>')?>
+        <?php echo (!empty($this->session->userdata('errorContrasena')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorContrasena').'</div>':''?>
 <!--    
         <form>-->
         <?php echo form_open(base_url("acceso/login"))?>
@@ -58,13 +59,13 @@
             </div>
           </div>
           <!--
-          <a class="btn btn-primary btn-block" href="index.html">Ingresar</a>-->
+          <a class="btn btn-primary btn-block" href="index.html">Ingresar</a>-->          
           <?php echo form_submit($logitems["ingresar"])?>
 <!--    
         </form>-->
         <?php echo form_close() ?>
         <div class="text-center">
-          <a class="d-block small mt-3" href="register.html">Registrar una cuenta</a>
+          <a class="d-block small mt-3" href="<?php echo base_url('acceso/registro')?>">Registrar una cuenta</a>
           <a class="d-block small" href="forgot-password.html">¿Olvidaste tú contraseña?</a>
           <a class="d-block small" href="<?php echo base_url()?>">Inicio</a>
         </div>
