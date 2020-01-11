@@ -68,4 +68,17 @@ Class LibAcceso{
         }
     }
 
+    /**
+     * @author Gustavo Pérez Cruz
+     * @uses verifica si existe sesión, si no lo redirige al home
+     * @return view
+     */
+    public function cambiarContrasena($data){
+        //inicializa la peticion al servidor REST para usar un metodo
+        $this->ci->rest->initialize(array('server' => base_url().'acceso/rest/RestUsuarios/'));
+        //consulta el servicio registrarUsuario() con los parametros solicitados
+        $datos = $this->ci->rest->post('cambiarContrasena',$data,'json');
+        return $datos;
+    }
+
 }//fin de LibAcceso

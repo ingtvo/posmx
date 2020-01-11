@@ -99,5 +99,38 @@ class LibSeguridad {
 		}
 	}//fin de desEncriptaDatos
 
+	/**
+    * @author Gustavo Pérez
+    * @uses genera un token para usuario de migracion o invitado
+    * @return string
+    */
+    public function generarToken($correoElectronico)
+    {
+    	$data['correo'] = $correoElectronico;
+        $data['token'] = $this->dataEncriptaDatos($correoElectronico.date("Y-m-d H:i:s"));
+        //asignar token a usuario
+        $this->ci->rest->initialize(array('server' => base_url().'acceso/rest/RestUsuarios/'));
+        $data = $this->ci->rest->post('generarToken',$data,'json');
+
+        return $data;
+    }
+
+    /**
+    * @author Gustavo Pérez
+    * @uses Lectura del token que corresponde a un usuario
+    * @param [idUsuario] id del usuario
+    * @return array
+    */
+    public function leerToken($idUsuario)
+    {
+    	$data['idUsuario'] = $idUsuario;
+        $this->ci->rest->initialize(array('server' => base_url().'acceso/rest/RestUsuarios/'));
+        $data = $this->ci->rest->post('leerToken',$data,'json');
+        $this->ci->rest->debug();
+        if(((!empty($data->success)) && $data->success == true))
+            return $data;
+        else
+        	return null;
+    }
 
 }//fin de la biblioteca

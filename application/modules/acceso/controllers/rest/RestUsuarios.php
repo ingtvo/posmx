@@ -68,7 +68,19 @@ class RestUsuarios extends REST_Controller{
                         $data['response'] = 'No se encontro ningun usuario.';
                         $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);  
                     }
-                    break;                           
+                    break;
+                case 'recuperarContrasena':
+                        if($usuario['correo'] == $correo){
+                        $data['success'] = true;
+                        $data['response'] = 'Revisa tu correo, para renovar tu contraseña';
+                        $data['usuario'] = $usuario;
+                        $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);   
+                    }else{
+                        $data['success'] = false;
+                        $data['response'] = 'El usuario no existe.';
+                        $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);  
+                    }
+                    break;                        
                default:
                     $data['success'] = false;
                     $data['response'] = 'El usuario no existe.';
@@ -119,6 +131,109 @@ class RestUsuarios extends REST_Controller{
         {
             $data['success']=false;
             $data['response']='No se pudo realizar el registro.';
+            $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);
+        }
+    }
+
+
+    /**
+     * @author Gustavo Pérez Cruz
+     * @param datos por obtenidos por post
+     * @uses Registra un usuario con los datos obtenidos
+     * @return array
+     */
+    public function cambiarContrasena_post()
+    {    
+        $contrasena = $this->input->input_stream('contrasena');
+        $idUsuario = $this->input->input_stream('idUsuario');
+
+        
+        $data = [
+            'success'=> false,
+            'response'=> ''
+        ];
+
+        $this->load->model('MdlAcceso');
+        $cambioOk = $this->MdlAcceso->cambiarContrasena($idUsuario, $contrasena);
+
+        if ($cambioOk)
+        {
+            $data['success']=true;
+            $data['response']='Se Cambio exitosamente.';            
+            $this->set_response($data, REST_Controller::HTTP_OK);
+        }            
+        else
+        {
+            $data['success']=false;
+            $data['response']='No se pudo realizar el cambio.';
+            $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);
+        }
+    }
+
+
+    /**
+     * @author Gustavo Pérez Cruz
+     * @param datos por obtenidos por post
+     * @uses 
+     * @return array
+     */
+    public function generarToken_post()
+    {    
+        $correo = $this->input->input_stream('correo');
+        $token = $this->input->input_stream('token');
+        
+        $data = [
+            'success'=> false,
+            'response'=> ''
+        ];
+
+        $this->load->model('MdlAcceso');
+        $tokenId = $this->MdlAcceso->generarToken($correo, $token);
+
+        if ($tokenId)
+        {
+            $data['success']=true;
+            $data['response']='Se generó token exitosamente.';
+            $data['token'] = $tokenId;        
+            $this->set_response($data, REST_Controller::HTTP_OK);
+        }            
+        else
+        {
+            $data['success']=false;
+            $data['response']='No se pudo crear el token.';
+            $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);
+        }
+    }
+
+        /**
+     * @author Gustavo Pérez Cruz
+     * @param datos por obtenidos por post
+     * @uses 
+     * @return array
+     */
+    public function leerToken_post()
+    {    
+        $idUsuario = $this->input->input_stream('idUsuario');
+        
+        $data = [
+            'success'=> false,
+            'response'=> ''
+        ];
+
+        $this->load->model('MdlAcceso');
+        $tokenId = $this->MdlAcceso->leerToken($idUsuario);
+
+        if ($tokenId)
+        {
+            $data['success'] = true;
+            $data['response']='Se obtubo el token correctamente.';   
+            $data['data'] = $tokenId;
+            $this->set_response($data, REST_Controller::HTTP_OK);
+        }            
+        else
+        {
+            $data['success']=false;
+            $data['response']='No se pudo obtener el token.';
             $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);
         }
     }

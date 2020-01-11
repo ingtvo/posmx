@@ -15,6 +15,7 @@ class Acceso extends MX_Controller {
         parent::__construct();
 		$this->load->helper("formularios");
 		$this->load->library("session");
+		$this->load->library('Acceso/LibAcceso');
 	}
 
     /**
@@ -67,7 +68,6 @@ class Acceso extends MX_Controller {
 				$usuario['contrasena'] = $this->input->post('contrasena');
 				$usuario['origen'] = 'login';
 				
-				$this->load->library('Acceso/LibAcceso');
 				$acceso = $this->libacceso->validarAcceso($usuario);
 
 				if(!empty($acceso->success) &&  $acceso->success == true){	
@@ -128,7 +128,7 @@ class Acceso extends MX_Controller {
 			$msg = (!empty($this->session->flashdata('errorContrasena')))?$this->session->flashdata('errorContrasena'):null;
 			$data = array(
 						'dataPage', array('title' => 'Ingresar',
-						'description' => 'Ingresar al Dashboard de administración'),
+						'description' => 'Registro del usuario en la plataforma'),
 						'regitems'=>regitems(),
 						'error' => $msg
 						);
@@ -143,7 +143,6 @@ class Acceso extends MX_Controller {
     * @uses Registra al usuario
     * @return view
     */
-
     public function registrarUsuario(){
     	//validando que existan datos recibidos por post
 		if(!$this->input->post("submit")){
@@ -165,7 +164,6 @@ class Acceso extends MX_Controller {
 				//refrescando
 				redirect(base_url("acceso/registro"));
 			}else{
-				$this->load->library('Acceso/LibAcceso');
 				//obteniendo los datosq ue se reciben por post e imprimiendolos
 				$usuario['nombres'] = $this->input->post('nombres');
 				$usuario['apellidoPaterno'] = $this->input->post('apellidoPaterno');
@@ -200,6 +198,211 @@ class Acceso extends MX_Controller {
 		}
     }//fin de registrarUsuario
 
+
+	/**
+    * @author Gustavo Pérez Cruz
+    * @uses Recupera la contraseña del usuario y se la envia por correo
+    * @return view
+    */
+    public function recuperarContrasena(){
+    	//verificando si existe sesión para redirigir al usuario
+    	if((empty(!$this->session->userdata('logueado'))) == FALSE || $this->session->userdata('logueado') == NULL){
+            $data = array(
+					'dataPage', array('title' => 'Recuperar Contraseña',
+									'description' => 'Recupera la contraseña de usuario'),
+					'recuperaritems' => logitems(),
+					);
+
+				//redireccionando a la vista para recuperar contraseña
+				$this->load->view('recuperarContrasena', $data);
+            
+        }else{
+        	//como hay sesion de usuario no necesita recupera contraseña y se regresa al dashboard
+        	redirect(base_url('Admin/Dashboard'));
+        }
+    }
+
+    public	function enviarContrasena(){
+    //validando que existan datos recibidos por post
+			if(!$this->input->post("submit")){
+				//agregando el helper para validar los campos delformulario
+				$this->load->helper("security");
+
+				$this->form_validation->set_rules("correo", "Correo", "required|trim|valid_email|xss_clean");
+
+				$this->form_validation->set_message("required", "El campo %s es requerido");
+				$this->form_validation->set_message("valid_emal", "El campo %s no es un correo válido");
+				$this->form_validation->set_message("min_length", "El campo %s debe contener almenos 6 caracteres");
+				$this->form_validation->set_message("max_length", "El campo %s no sobrepasar de 50 caracteres");
+
+				if(! $this->form_validation->run()){
+					//refrescando
+					redirect(base_url('acceso/recuperarContrasena'));
+				}else{
+					//obteniendo los datos  que se reciben por post e imprimiendolos
+					$usuario['correo'] = $this->input->post('correo');
+					$usuario['origen'] = 'recuperarContrasena';
+						
+					
+					$acceso = $this->libacceso->validarAcceso($usuario);
+				//	var_dump($acceso);
+
+					if(!empty($acceso->success) &&  $acceso->success == true){
+						$this->load->library('Sistema/LibSeguridad');
+						$token = $this->libseguridad->generarToken($usuario['correo']);
+						var_dump($token);
+
+						//Estableciendo datos de sesion de usuario
+						$usuario_data = array(
+					                    'userId' => $acceso->usuario->id_usuario,
+					                    'correoElectronico' => $acceso->usuario->correo,
+					                    'nombre' => $acceso->usuario->nombres,                  
+					                    'logueado'=>$acceso->success,
+					                    'token' => $token
+		                				);
+$logginLink = base_url().'acceso/nuevaContrasena/'.$acceso->usuario->id_usuario.'/'.$token->token;
+	
+						$mensaje = '<table>
+									  <caption>Cambia tu contraseña</caption>
+									  <tr>
+									    <td>John Lennon</td>
+									    <td>Rhythm Guitar</td>
+									  </tr>
+									  <tr>
+									    <td>Enlace</td>
+									    <td>'.$logginLink.'</td>
+									  </tr>
+									  <tr>
+									    <td>--</td>
+									    <td>--</td>
+									  </tr>
+									  <tr>
+									    <td>**/td>
+									    <td>**</td>
+									  </tr>
+									</table>';
+
+						$this->load->library('Sistema/LibMail');
+		    			$envioExito =$this->libmail->enviarMail($usuario_data['correoElectronico'], 'Cambiar contraseña', $mensaje);
+//$envioExito=true;
+		                if($envioExito){
+		                    $msg= "¡Mensaje enviado correctamente!";//"¡Mensaje enviado correctamente!";
+		                }else{
+		                    $msg= "Error en el envío: ";
+		                }
+
+		                $msg = $acceso->response;
+						$this->session->set_flashdata('msjUsuario', $msg);
+						//redirect(base_url('acceso/recuperarContrasena'));				
+					}else{
+						$msg = $acceso->response;
+						$this->session->set_flashdata('errorUsuario', $msg);
+					//	redirect(base_url('acceso/recuperarContrasena'));
+					}					
+				}
+			}else{
+				//redireccionando a la vista para recuperar contraseña
+				$this->load->view('recuperarContrasena', $data);
+			}    	
+    }
+
+//vista para cambiar contraseña
+    public function nuevaContrasena($idUsuario=false, $token=false){
+
+    	if ($idUsuario == false || $token == false) {
+    		//verificando si existe sesión para redirigir al usuario
+    		
+	    	if ((!empty($this->session->userdata('logueado'))) == TRUE && $this->session->userdata('userId') != NULL) {
+	        	echo "LOGG";
+	            $data = array(
+						'dataPage', array('title' => 'Recuperar Contraseña',
+										'description' => 'Recupera la contraseña de usuario'),
+						'resetitems' => resetitems()
+						);
+					//redireccionando a la vista para recuperar contraseña
+					$this->load->view('nuevaContrasena', $data);
+	        }
+	        else{
+	        	//como hay sesion de usuario no necesita recupera contraseña y se regresa al dashboard
+	        	redirect(base_url('Acceso/recuperarContrasena'));
+	        	//echo 'redireccion a Cambiar contraseña';
+	        }
+    	}else{
+
+    		$this->load->library('Sistema/LibSeguridad');
+    		$tmpToken=$this->libseguridad->leerToken($idUsuario);
+
+    		if($token == $tmpToken->data->token){
+ 				//echo 'guardar contraseña';
+ 				$this->load->view('nuevaContrasena', $data);
+    		}else{
+    			//echo 'redireccion a Cambiar contraseña';
+    			redirect(base_url('Acceso/recuperarContrasena'));
+    		}
+
+    	}
+
+    		
+
+
+    	
+    }//fin de nuevaContrasena()
+
+    public function cambiarContrasena(){
+    	var_dump($this->session->userdata('logueado'));
+    	if((empty($this->session->userdata('logueado'))) == TRUE || $this->session->userdata('userId') != NULL){
+    		echo "LOGGINTRUE";
+			if(!$this->input->post("submit")){
+				//agregando el helper para validar los campos delformulario
+				$this->load->helper("security");
+
+				$this->form_validation->set_rules("contrasena", "Contraseña", "required|trim|min_length[6]|max_length[50]|xss_clean");
+
+				$this->form_validation->set_message("required", "El campo %s es requerido");
+				$this->form_validation->set_message("valid_emal", "El campo %s no es un correo válido");
+				$this->form_validation->set_message("min_length", "El campo %s debe contener almenos 6 caracteres");
+				$this->form_validation->set_message("max_length", "El campo %s no sobrepasar de 50 caracteres");
+
+				if(! $this->form_validation->run()){
+					//refrescando
+					redirect(base_url('acceso/recuperarContrasena'));					
+				}else{
+					//obteniendo los datos  que se reciben por post e imprimiendolos
+					$usuario['contrasena'] = $this->input->post('contrasena');
+					$usuario['contrasena2'] = $this->input->post('contrasena2');
+					   
+
+					if($usuario['contrasena'] == $usuario['contrasena2'])
+					{
+						$usuario['contrasena'] = password_hash($this->input->post('contrasena'), PASSWORD_DEFAULT);	
+						//se cambia la contraseña
+
+
+						$datos['idUsuario'] = $this->session->userdata('userId');
+						$datos['contrasena'] = $usuario['contrasena'];
+						$cambioOK = $this->libacceso->cambiarContrasena($datos);						
+						$this->session->set_flashdata('msjUsuario', $cambioOK->response);
+						$this->load->view('acceso/mensajes');
+					}else{
+						//se regresa a recuperar contraseña con mensaje de que no son identicas
+						$msg='Las contraseñas no son identicas';
+						$this->session->set_flashdata('errorUsuario', $msg);						
+						redirect(base_url('acceso/nuevaContrasena'));
+					}			
+				}
+			}else{
+				echo "????";
+				//redireccionando a la vista para recuperar contraseña
+				$msg='No se recibieron los campos';
+				$this->session->set_flashdata('msjUsuario', $msg);
+				//redirect(base_url('acceso/nuevaContrasena'));
+			}                
+        }else{
+        	//como hay sesion de usuario no necesita recupera contraseña y se regresa al dashboard
+        	redirect(base_url('Admin/Dashboard'));
+        }
+
+    }//fin de cambiarContraseña
 
 
 }//fin del login

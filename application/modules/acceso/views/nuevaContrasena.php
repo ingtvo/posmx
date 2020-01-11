@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>POSMX - Login</title>
+  <title>POSMX - Cambiar Contraseña</title>
 
   <!-- Custom fonts for this template-->
   <link href="<?php echo base_url().'assets/' ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,44 +23,32 @@
 
   <div class="container">
     <div class="card card-login mx-auto mt-5">
-      <div class="card-header">Ingresar</div>
+      <div class="card-header">Cambiar Contraseña</div>
       <div class="card-body">
         <?php echo validation_errors('<div class="alert alert-danger" role="alert">','</div>')?>
-        <?php echo (!empty($this->session->userdata('errorContrasena')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorContrasena').'</div>':''?>
+        <?php echo (!empty($this->session->userdata('errorUsuario')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorUsuario').'</div>':''?>
+        <?php echo (!empty($this->session->userdata('msjUsuario')))?'<div class="alert alert-success" role="alert">'.$this->session->userdata('msjUsuario').'</div>':''?>
 <!--    
         <form>-->
-        <?php echo form_open(base_url("acceso/login"))?>
+        <?php echo form_open(base_url("acceso/cambiarContrasena"))?>
           <div class="form-group">
-            <div class="form-label-group">
-              <!--
-              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-              <label for="inputEmail">Correo electrónico</label>-->
-              <?php echo form_input($logitems["correo"])?>
-              <?php echo form_label("Correo", "correo")?>
+            <div class="form-label-group">           
+              <?php echo form_input($resetitems["contrasena"])?>
+              <?php echo form_label("Contraseña", "contrasena")?>              
             </div>
           </div>
           <div class="form-group">
             <div class="form-label-group">
-              <!--
-              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-              <label for="inputPassword">Contraseña</label>-->
-              <?php echo form_submit($logitems["contrasena"])?>
-              <?php echo form_label("Contraseña", "contrasena")?>
+              <?php echo form_submit($resetitems["contrasena2"])?>
+              <?php echo form_label("Confirmar Contraseña", "contrasena2")?>
             </div>
           </div>
-          <div class="form-group">
-            <div class="checkbox">
-              <label>
-                <!--
-                <input type="checkbox" value="remember-me">-->
-                <?php echo form_input(['type' => 'checkbox', 'value' => 'recuerdame']);?>
-                Rescordar contraseña
-              </label>
-            </div>
-          </div>
+          
+          <?php echo (!empty($token))?'<div class="form-label-group"><div class="form-label-group">'.form_input($resetitems["token"],$token).'</div></div>':''?>
+
           <!--
           <a class="btn btn-primary btn-block" href="index.html">Ingresar</a>-->          
-          <?php echo form_submit($logitems["ingresar"])?>
+          <?php echo form_submit($resetitems["guardar"])?>
 <!--    
         </form>-->
         <?php echo form_close() ?>

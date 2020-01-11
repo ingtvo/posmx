@@ -257,7 +257,7 @@
         <?php echo form_close() ?>
         <div class="text-center">
           <a class="d-block small mt-3" href="<?php echo base_url('acceso/registro')?>">Registrar una cuenta</a>
-          <a class="d-block small" href="<?php echo base_url('acceso/recuperar')?>">¿Olvidaste tú contraseña?</a>
+          <a class="d-block small" href="<?php echo base_url('acceso/recuperarContrasena')?>">¿Olvidaste tú contraseña?</a>
           <a class="d-block small" href="<?php echo base_url('acceso')?>">Inicio</a>
         </div>
       </div>

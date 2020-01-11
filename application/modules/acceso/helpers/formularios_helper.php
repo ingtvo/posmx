@@ -91,3 +91,62 @@ function regitems(){
  			),
 		);
 	}
+
+/**
+ * @author Gustavo Pérez Cruz
+ * @uses Define los campos recuperar la contraseña
+ */
+function recuperaritems(){
+		return array(
+			'correo' => array(
+				'type' => 'email',				
+				'id' => 'correo',
+				'name' => 'correo',
+				'class' => 'form-control',
+				'placeholder' => 'Correo Electrónico',
+				'required' => 'required',
+				'autofocus' => 'autofocus'
+			),
+ 			'ingresar' => array( 				
+				'type' => 'submit',
+				'value' => 'Recuperar',
+ 				'class' => 'btn btn-primary btn-block',
+ 			),
+		);
+	}
+
+/**
+ * @author Gustavo Pérez Cruz
+ * @uses Define los campos recuperar la contraseña
+ */
+function resetitems(){
+		return array(
+			'contrasena' => array(
+				'type' => 'password',				
+				'id' => 'contrasena',
+				'name' => 'contrasena',
+				'class' => 'form-control',
+				'required' => 'required',
+				'autofocus' => 'autofocus'
+			),
+			'contrasena2' => array(
+				'type' => 'password',				
+				'id' => 'contrasena2',
+				'name' => 'contrasena2',
+				'class' => 'form-control',
+				'required' => 'required'
+			),			
+			'token' => array(
+				'type' => 'text',				
+				'id' => 'token',
+				'name' => 'token',
+				'class' => 'form-control sr-only',
+				'readonly' =>'readonly'
+			),
+ 			'guardar' => array( 				
+				'type' => 'submit',
+				'value' => 'Guardar',
+ 				'class' => 'btn btn-primary btn-block',
+ 			),
+		);
+	}

@@ -77,6 +77,80 @@ class MdlAcceso extends CI_Model{
 
     /**
     * @author Gustavo Pérez Cruz
+    * @uses Busca al usuario por id y cambia su contraseña
+    * @param Recibe id del usuario y contraseña para cambiar la contraseña del usuario
+    * @return array de los campos de la consulta
+    */
+    public function cambiarContrasena($idUsuario, $contrasena){
+
+        $lectura = $this->load->database('default', TRUE);
+        $lectura->set('password', $contrasena);
+        $lectura->where('id_usuario', $idUsuario);        
+        if($lectura->update('usuario'))
+        {
+            $lectura->close();
+            return true;
+        }
+        else
+            $lectura->close();
+            return false;
+    }
+
+     /**
+    * @author Gustavo Pérez Cruz
+    * @uses 
+    * @param 
+    * @return 
+    */
+    public function generarToken($correo, $token){
+
+        $lectura = $this->load->database('default', TRUE);
+        $lectura->set('token', $token);
+        $lectura->where('correo_electronico', $correo);        
+        if($lectura->update('usuario'))
+        {
+            $lectura->close();
+            return $token;
+        }
+        else
+            $lectura->close();
+            return null;
+    }
+
+     /**
+    * @author Gustavo Pérez Cruz
+    * @uses 
+    * @param 
+    * @return 
+    */
+    public function leerToken($idUsuario)
+    {
+        $lectura = $this->load->database('default', TRUE);
+        $lectura->select('id_usuario, token');
+        $lectura->from('usuario');
+        $lectura->order_by('id_usuario', 'ASC');
+        $query = $lectura->get();
+        $lectura->close();
+
+        $arreglo = [];
+        if(!empty($query->result()))
+        {
+            $row = $query->row();
+            $tmp=[
+                'id_usuario'=>$row->id_usuario,
+                'token'=>$row->token
+            ];           
+
+            return $tmp;
+        }
+        else
+            return null;
+    }
+
+
+
+    /**
+    * @author Gustavo Pérez Cruz
     * @uses Registra al usuario
     * @param array con los datos del usuario a registrar
     * @return id del usuario registrado
