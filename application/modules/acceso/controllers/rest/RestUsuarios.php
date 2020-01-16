@@ -213,7 +213,7 @@ class RestUsuarios extends REST_Controller{
      */
     public function leerToken_post()
     {    
-        $idUsuario = $this->input->input_stream('idUsuario');
+        $idUsuario = $this->input->input_stream('idUsuario');      
         
         $data = [
             'success'=> false,

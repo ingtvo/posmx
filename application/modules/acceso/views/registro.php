@@ -27,6 +27,7 @@
       <div class="card-body">
         <?php echo validation_errors('<div class="alert alert-danger" role="alert">','</div>')?>
         <?php echo (!empty($error) && $error != null)?'<div class="alert alert-danger" role="alert">'.$error.'</div>':''?>
+        <?php echo (!empty($this->session->userdata('errorUsuario')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorUsuario').'</div>':''?>
 
         <?php echo form_open(base_url("acceso/registrarUsuario"))?>
           <form class="needs-validation" novalidate="">

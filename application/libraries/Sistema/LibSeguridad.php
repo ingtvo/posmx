@@ -107,7 +107,9 @@ class LibSeguridad {
     public function generarToken($correoElectronico)
     {
     	$data['correo'] = $correoElectronico;
-        $data['token'] = $this->dataEncriptaDatos($correoElectronico.date("Y-m-d H:i:s"));
+    	$data['token']=md5($correoElectronico.date("Y-m-d H:i:s"));
+    	//$data['token']=$this->ci->encryption->encrypt($correoElectronico.date("Y-m-d H:i:s"));
+        //$data['token'] = $this->dataEncriptaDatos($correoElectronico.date("Y-m-d H:i:s"));
         //asignar token a usuario
         $this->ci->rest->initialize(array('server' => base_url().'acceso/rest/RestUsuarios/'));
         $data = $this->ci->rest->post('generarToken',$data,'json');
@@ -124,13 +126,18 @@ class LibSeguridad {
     public function leerToken($idUsuario)
     {
     	$data['idUsuario'] = $idUsuario;
+
+
         $this->ci->rest->initialize(array('server' => base_url().'acceso/rest/RestUsuarios/'));
         $data = $this->ci->rest->post('leerToken',$data,'json');
-        $this->ci->rest->debug();
-        if(((!empty($data->success)) && $data->success == true))
+
+        //$this->ci->rest->debug();
+        if(((!empty($data->success)) && $data->success == true)){
+        
             return $data;
-        else
+        }else{
         	return null;
+        }
     }
 
 }//fin de la biblioteca

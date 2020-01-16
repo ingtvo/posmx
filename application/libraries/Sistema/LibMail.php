@@ -25,7 +25,7 @@ class LibMail {
 		$this->ci->email->initialize($config);
 
         $this->ci->email->from('ingtvo@ingtvo.net','POSMX');
-        $this->ci->email->to($usuario_data['correoElectronico']);
+        $this->ci->email->to($mailDestino);
         //$this->email->cc('otrocorreo@correo.com');
         $this->ci->email->subject($asunto);//PruebaT mejora para ti !!
         $this->ci->email->message($mensaje);

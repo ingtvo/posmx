@@ -128,6 +128,7 @@ class MdlAcceso extends CI_Model{
         $lectura = $this->load->database('default', TRUE);
         $lectura->select('id_usuario, token');
         $lectura->from('usuario');
+        $lectura->where('id_usuario',$idUsuario);
         $lectura->order_by('id_usuario', 'ASC');
         $query = $lectura->get();
         $lectura->close();

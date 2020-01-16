@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>POSMX - Cambiar Contraseña</title>
+  <title>POSMX - Nueva Contraseña</title>
 
   <!-- Custom fonts for this template-->
   <link href="<?php echo base_url().'assets/' ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,10 +23,11 @@
 
   <div class="container">
     <div class="card card-login mx-auto mt-5">
-      <div class="card-header">Cambiar Contraseña</div>
+      <div class="card-header">Nueva Contraseña</div>
       <div class="card-body">
         <?php echo validation_errors('<div class="alert alert-danger" role="alert">','</div>')?>
-        <?php echo (!empty($this->session->userdata('errorUsuario')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorUsuario').'</div>':''?>
+        <?php echo (!empty($this->session->userdata('errorUsuario')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorUsuario').'</div>':'';
+        ?>
         <?php echo (!empty($this->session->userdata('msjUsuario')))?'<div class="alert alert-success" role="alert">'.$this->session->userdata('msjUsuario').'</div>':''?>
 <!--    
         <form>-->
@@ -43,8 +44,10 @@
               <?php echo form_label("Confirmar Contraseña", "contrasena2")?>
             </div>
           </div>
+
+          <?php $tmpIdUser = (!empty($this->session->userdata('userId')))?$this->session->userdata('userId'):$this->session->userdata('tokenIdUsuario');?>
           
-          <?php echo (!empty($token))?'<div class="form-label-group"><div class="form-label-group">'.form_input($resetitems["token"],$token).'</div></div>':''?>
+          <?php echo (!empty($tmpIdUser))?'<div class="form-label-group"><div class="form-label-group">'.form_input($resetitems["inputIdUsuario"],$tmpIdUser).'</div></div>':''?>
 
           <!--
           <a class="btn btn-primary btn-block" href="index.html">Ingresar</a>-->          

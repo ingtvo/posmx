@@ -136,10 +136,10 @@ function resetitems(){
 				'class' => 'form-control',
 				'required' => 'required'
 			),			
-			'token' => array(
+			'inputIdUsuario' => array(
 				'type' => 'text',				
-				'id' => 'token',
-				'name' => 'token',
+				'id' => 'inputIdUsuario',
+				'name' => 'inputIdUsuario',
 				'class' => 'form-control sr-only',
 				'readonly' =>'readonly'
 			),
