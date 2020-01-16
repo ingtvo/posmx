@@ -165,7 +165,7 @@ class Acceso extends MX_Controller {
 				$data = array(
 						'dataPage', array('title' => 'Ingresar',
 						'description' => 'Registro del usuario en la plataforma'),
-						'regitems'=>regitems()
+						'regitems'=>regitems()	
 						);
 				$this->load->view('registro', $data);
 			}else{
@@ -275,8 +275,8 @@ class Acceso extends MX_Controller {
 					                    'token' => $token
 		                				);
 
-$logginLink = base_url().'acceso/nuevaContrasena/'.$acceso->usuario->id_usuario.'/'.$token->token;
-/*
+						$logginLink = base_url().'acceso/nuevaContrasena/'.$acceso->usuario->id_usuario.'/'.$token->token;
+
 						$mensaje = '<table>
 									  <caption>Cambia tu contraseña</caption>
 									  <tr>
@@ -298,8 +298,8 @@ $logginLink = base_url().'acceso/nuevaContrasena/'.$acceso->usuario->id_usuario.
 									</table>';
 
 						$this->load->library('Sistema/LibMail');
-		    			$envioExito =$this->libmail->enviarMail($usuario_data['correoElectronico'], 'Cambiar contraseña', $mensaje);*/
-$envioExito=true;
+		    			$envioExito =$this->libmail->enviarMail($usuario_data['correoElectronico'], 'Cambiar contraseña', $mensaje);
+//$envioExito=true;
 		                if($envioExito){
 		                    $msg= "¡Mensaje enviado correctamente!";//"¡Mensaje enviado correctamente!";
 		                }else{
