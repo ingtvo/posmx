@@ -284,7 +284,7 @@ class Acceso extends MX_Controller {
 									    <td>Rhythm Guitar</td>
 									  </tr>
 									  <tr>
-									    <td>'.$logginLink.'Enlace</td>
+									    <td>'.$logginLink.'</td>
 									    <td>Enlace</td>
 									  </tr>
 									  <tr>
