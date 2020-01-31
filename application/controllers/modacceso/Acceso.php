@@ -83,13 +83,14 @@ class Acceso extends CI_Controller {
 				}else{
 					//captando el error para establecerlo en una variable de sesión
 					$msg = $acceso->response;
+					var_dump($msg);
 					$this->session->set_flashdata('errorContrasena', $msg);
-					redirect('acceso');
+					redirect('/modacceso/Acceso');
 				}					
 			}
 		}else{
 			//redireccionando al login
-			redirect(base_url("acceso"));
+			redirect(base_url("/modacceso/Acceso"));
 		}
 	}//fin de validandoAcceso
 
