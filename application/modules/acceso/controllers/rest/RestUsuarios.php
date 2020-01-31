@@ -37,13 +37,15 @@ class RestUsuarios extends REST_Controller{
             'response'=> ''
         ];
 
-        //Realizando una consulta al modelo de datos para encontrar el usuario
-        $this->load->model('MdlAcceso');
-        $usuario = $this->MdlAcceso->buscarUsuario($correo,$contrasena);
+        
 
         //Decidiendo el tipo de respuesta segun el origen de la petición
-        if (!is_null($usuario))
-        {            
+        if (!is_null($origen))
+        {
+            //Realizando una consulta al modelo de datos para encontrar el usuario
+        $this->load->model('MdlAcceso');
+        $usuario = $this->MdlAcceso->buscarUsuario($correo,$contrasena);
+        
             switch ($origen)
             {
                case 'login':
@@ -64,9 +66,9 @@ class RestUsuarios extends REST_Controller{
                         $data['response'] = 'Este usuario ya existe.';
                         $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);   
                     }else{
-                        $data['success'] = false;
+                        $data['success'] = true;
                         $data['response'] = 'No se encontro ningun usuario.';
-                        $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);  
+                        $this->set_response($data, REST_Controller::HTTP_OK);    
                     }
                     break;
                 case 'recuperarContrasena':
@@ -91,7 +93,7 @@ class RestUsuarios extends REST_Controller{
         else
         {
             $data['success']=false;
-            $data['response']='El usuario no existe.';
+            $data['response']='Acceso no disponible';
             $this->set_response($data, REST_Controller::HTTP_NOT_FOUND);
         }
     }

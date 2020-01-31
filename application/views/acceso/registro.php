@@ -30,7 +30,7 @@
         <?php echo (!empty($error) && $error != null)?'<div class="alert alert-danger" role="alert">'.$error.'</div>':''?>
         <?php echo (!empty($this->session->userdata('errorUsuario')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorUsuario').'</div>':''?>
 
-        <?php echo form_open(base_url("acceso/registrarUsuario"))?>
+        <?php echo form_open(base_url("modacceso/Acceso/registrarUsuario"))?>
           <form class="needs-validation" novalidate="">
             <div class="row">
               <div class="col-md-4 mb-3"><!--
@@ -91,7 +91,9 @@
                     Re escriba la de usuario es requerido.
                   </div>
                 </div>
-              </div>                
+              </div>
+              <?php echo form_input($regitems["origen"])?>
+
             </div><!-- fin del row-->
 <!--
             <hr class="mb-4">
@@ -258,9 +260,9 @@
           </form>
         <?php echo form_close() ?>
         <div class="text-center">
-          <a class="d-block small mt-3" href="<?php echo base_url('acceso/registro')?>">Registrar una cuenta</a>
-          <a class="d-block small" href="<?php echo base_url('acceso/recuperarContrasena')?>">¿Olvidaste tú contraseña?</a>
-          <a class="d-block small" href="<?php echo base_url('acceso')?>">Inicio</a>
+          <a class="d-block small mt-3" href="<?php echo base_url('modacceso/Acceso/registro')?>">Registrar una cuenta</a>
+          <a class="d-block small" href="<?php echo base_url('modacceso/Acceso/recuperarContrasena')?>">¿Olvidaste tú contraseña?</a>
+          <a class="d-block small" href="<?php echo base_url('modacceso/Acceso')?>">Inicio</a>
         </div>
       </div>
     </div>

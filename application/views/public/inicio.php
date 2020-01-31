@@ -9,7 +9,7 @@
         </div>
         <div class="col-lg-8 align-self-baseline">
           <p class="text-white-75 font-weight-light mb-5">Start Bootstrap can help you build better websites using the Bootstrap framework! Just download a theme and start customizing, no strings attached!</p>
-          <a class="btn btn-primary btn-xl js-scroll-trigger" href="<?php echo base_url('acceso')?>">Entrar</a>
+          <a class="btn btn-primary btn-xl js-scroll-trigger" href="<?php echo base_url('modacceso/Acceso')?>">Entrar</a>
         </div>
       </div>
     </div>

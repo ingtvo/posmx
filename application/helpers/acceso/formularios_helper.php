@@ -22,6 +22,13 @@ function logitems(){
  				'name' => 'contrasena',
  				'class' => 'form-control',
  				'placeholder' => 'contraseña',
+ 			), 			
+ 			'origen' => array( 				
+				'type' => 'text',
+ 				'id' => 'origen',
+ 				'name' => 'origen',
+ 				'class' => 'form-control invisible',
+ 				'value' => 'login'
  			),
  			'ingresar' => array( 				
 				'type' => 'submit',
@@ -83,6 +90,13 @@ function regitems(){
  				'name' => 'contrasena2',
  				'class' => 'form-control',
  				'placeholder' => 'contraseña',
+ 			), 			
+ 			'origen' => array( 				
+				'type' => 'text',
+ 				'id' => 'origen',
+ 				'name' => 'origen',
+ 				'class' => 'form-control invisible',
+ 				'value' => 'registro',
  			),
  			'registrar' => array( 				
 				'type' => 'submit',
@@ -142,7 +156,14 @@ function resetitems(){
 				'name' => 'inputIdUsuario',
 				'class' => 'form-control sr-only',
 				'readonly' =>'readonly'
-			),
+			), 			
+ 			'origen' => array( 				
+				'type' => 'text',
+ 				'id' => 'origen',
+ 				'name' => 'origen',
+ 				'class' => 'form-control invisible',
+ 				'value' => 'registro'
+ 			),
  			'guardar' => array( 				
 				'type' => 'submit',
 				'value' => 'Guardar',

@@ -39,7 +39,7 @@ class MdlAcceso extends CI_Model{
         $query = $lectura->get();
         $lectura->close();
 
-        $arreglo = [];
+        $tmp = [];
         if(!empty($query->result()))
         {
             $row = $query->row();

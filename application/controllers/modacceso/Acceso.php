@@ -8,12 +8,12 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Acceso extends MX_Controller {
+class Acceso extends CI_Controller {
 
     function __construct() {    	
 
         parent::__construct();
-		$this->load->helper("formularios");
+		$this->load->helper("acceso/formularios");
 		$this->load->library("session");
 		$this->load->library('Acceso/LibAcceso');
 	}
@@ -32,7 +32,7 @@ class Acceso extends MX_Controller {
 									'description' => 'Ingresar al Dashboard de administración'),
 					'logitems' => logitems(),
 					);
-			$this->load->view('login', $data);			
+			$this->load->view('acceso/login', $data);			
         }else{
         	redirect(base_url('admin/Dashboard'));
         }
@@ -69,7 +69,7 @@ class Acceso extends MX_Controller {
 				$usuario['origen'] = 'login';
 				
 				$acceso = $this->libacceso->validarAcceso($usuario);
-
+		//$this->rest->debug();
 				if(!empty($acceso->success) &&  $acceso->success == true){	
 					//Estableciendo datos de sesion de usuario
 					$usuario_data = array(
@@ -123,7 +123,7 @@ class Acceso extends MX_Controller {
 	{
 		//comprobando si existe sesión para mostrar la vista
 		if((empty(!$this->session->userdata('logueado'))) == FALSE || $this->session->userdata('logueado') == NULL){
-			$this->load->helper("formularios");
+			$this->load->helper("acceso/formularios");
 			//Definiendo el error si existe en una variable de sesión
 			$msg = (!empty($this->session->flashdata('errorContrasena')))?$this->session->flashdata('errorContrasena'):null;
 			$data = array(
@@ -132,7 +132,7 @@ class Acceso extends MX_Controller {
 						'regitems'=>regitems(),
 						'error' => $msg
 						);
-			$this->load->view('registro', $data);
+			$this->load->view('acceso/registro', $data);
 		}else{
 			redirect(base_url('admin/Dashboard'));
 		}
@@ -145,7 +145,7 @@ class Acceso extends MX_Controller {
     */
     public function registrarUsuario(){
     	//validando que existan datos recibidos por post
-		if(!$this->input->post("submit")){
+		if(!$this->input->post("submit") == true){
 			//agregando el helper para validar los campos delformulario
 			$this->load->helper("security");
 
@@ -167,7 +167,7 @@ class Acceso extends MX_Controller {
 						'description' => 'Registro del usuario en la plataforma'),
 						'regitems'=>regitems()	
 						);
-				$this->load->view('registro', $data);
+				$this->load->view('acceso/registro', $data);
 			}else{
 				//obteniendo los datosq ue se reciben por post e imprimiendolos
 				$usuario['nombres'] = $this->input->post('nombres');
@@ -179,39 +179,37 @@ class Acceso extends MX_Controller {
 				$usuario['origen'] = 'registro';
 
 				//buscando si ya existe el usuario
-				$acceso = $this->libacceso->validarAcceso($usuario);
-				var_dump($acceso);
+				$acceso = $this->libacceso->validarAcceso($usuario);			
+
 
 				if($acceso->success == true){
-
 					//confirmado que las contraseñas sean identicas
 					if($usuario['contrasena'] == $usuario['contrasena2']){
 						$usuario['contrasena'] = password_hash($this->input->post('contrasena'), PASSWORD_DEFAULT);		
 						
 						$acceso = $this->libacceso->registrarUsuario($usuario);
 						echo 'redireccionando al Dashboard';		
-						//redirect(base_url('admin/Dashboard/'));
+						redirect(base_url('admin/Dashboard/'));
 
 					}else{
 						//usando flash data para marcar el error en un salto de pagina
 						$msg = 'Las contraseñas no coinciden, vuelve a intentar';
-						$this->session->set_flashdata('errorUsuario', $msg);					
-						redirect(base_url('acceso/registro/'));
+						$this->session->set_flashdata('errorUsuario', $msg);	
+						echo $msg;				
+						redirect(base_url('modacceso/Acceso/registro/'));
 					}
 				}else{
-					//usando flash data para marcar el error en un salto de pagina
-					$msg = 'Las contraseñas no coinciden, vuelve a intentar';
-					$this->session->set_flashdata('errorUsuario', $acceso->response);					
-					redirect(base_url('acceso/registro/'));
+					//usando flash data para marcar el error en un salto de pagina					
+					$this->session->set_flashdata('errorUsuario', $acceso->response);	
+					redirect(base_url('modacceso/Acceso/registro/'));
 				}
 			}
 
 		}else{
 			//redireccionando al login
-			redirect(base_url("acceso/registro"));
+			redirect(base_url("modacceso/Acceso/registro"));
 		}
     }//fin de registrarUsuario
-
 
 	/**
     * @author Gustavo Pérez Cruz
@@ -228,7 +226,7 @@ class Acceso extends MX_Controller {
 					);
 
 				//redireccionando a la vista para recuperar contraseña
-				$this->load->view('recuperarContrasena', $data);
+				$this->load->view('acceso/recuperarContrasena', $data);
             
         }else{
         	//como hay sesion de usuario no necesita recupera contraseña y se regresa al dashboard
@@ -251,7 +249,7 @@ class Acceso extends MX_Controller {
 
 				if(! $this->form_validation->run()){
 					//refrescando
-					redirect(base_url('acceso/recuperarContrasena'));
+					redirect(base_url('modacceso/Acceso/recuperarContrasena'));
 				}else{
 					//obteniendo los datos  que se reciben por post e imprimiendolos
 					$usuario['correo'] = $this->input->post('correo');
@@ -275,8 +273,8 @@ class Acceso extends MX_Controller {
 					                    'token' => $token
 		                				);
 
-						$logginLink = base_url().'acceso/nuevaContrasena/'.$acceso->usuario->id_usuario.'/'.$token->token;
-
+						$logginLink = base_url().'modacceso/Acceso/nuevaContrasena/'.$acceso->usuario->id_usuario.'/'.$token->token;
+/*
 						$mensaje = '<table>
 									  <caption>Cambia tu contraseña</caption>
 									  <tr>
@@ -298,8 +296,8 @@ class Acceso extends MX_Controller {
 									</table>';
 
 						$this->load->library('Sistema/LibMail');
-		    			$envioExito =$this->libmail->enviarMail($usuario_data['correoElectronico'], 'Cambiar contraseña', $mensaje);
-//$envioExito=true;
+		    			$envioExito =$this->libmail->enviarMail($usuario_data['correoElectronico'], 'Cambiar contraseña', $mensaje);*/
+$envioExito=true;
 		                if($envioExito){
 		                    $msg= "¡Mensaje enviado correctamente!";//"¡Mensaje enviado correctamente!";
 		                }else{
@@ -308,16 +306,16 @@ class Acceso extends MX_Controller {
 
 		                $msg = $acceso->response;
 						$this->session->set_flashdata('msjUsuario', $msg);
-						redirect(base_url('acceso/recuperarContrasena'));				
+						redirect(base_url('modacceso/Acceso/recuperarContrasena'));				
 					}else{
 						$msg = $acceso->response;
 						$this->session->set_flashdata('errorUsuario', $msg);
-						redirect(base_url('acceso/recuperarContrasena'));
+						redirect(base_url('modacceso/Acceso/recuperarContrasena'));
 					}					
 				}
 			}else{
 				//redireccionando a la vista para recuperar contraseña
-				$this->load->view('recuperarContrasena', $data);
+				$this->load->view('acceso/recuperarContrasena', $data);
 			}    	
     }
 
@@ -337,7 +335,7 @@ class Acceso extends MX_Controller {
 						'resetitems' => resetitems()
 						);
 					//redireccionando a la vista para recuperar contraseña
-					$this->load->view('nuevaContrasena', $data);//=>cambiarContrasena
+					$this->load->view('acceso/nuevaContrasena', $data);//=>cambiarContrasena
     	}elseif($tmpidUsuario!=false && $tmpToken!=false){//comprobar si existe el token
 
     		//El usuario tiene idUsuario y Token
@@ -353,28 +351,28 @@ class Acceso extends MX_Controller {
 											'description' => 'Cambia la contraseña de usuario'),
 							'resetitems' => resetitems()
 							); 			
-	 				$this->load->view('nuevaContrasena', $data);
+	 				$this->load->view('acceso/nuevaContrasena', $data);
 
 	    		}else{
 	    			$msj= 'El token no es válido';
 	    			$this->session->set_flashdata('errorUsuario',$msj);
-	    			redirect(base_url('acceso/recuperarContrasena'));
+	    			redirect(base_url('modacceso/Acceso/recuperarContrasena'));
 	    		}
     		}else{
     			$msj= 'El token no es válido';
     			$this->session->set_userdata('errorUsuario',$msj);
-    			redirect(base_url('acceso/recuperarContrasena'));
+    			redirect(base_url('modacceso/Acceso/recuperarContrasena'));
     		}
 
     	}else{
-    		redirect(base_url('acceso/recuperarContrasena'));
+    		redirect(base_url('modacceso/Acceso/recuperarContrasena'));
     	}    	
     }//fin de nuevaContrasena()
 
 
 //funcion que cambia la contraseña y redirecciona o manda mensaje
     public function cambiarContrasena(){    	
-    	var_dump($this->input->post("inputIdUsuario"));
+    	//var_dump($this->input->post("inputIdUsuario"));
 			if(!empty($this->input->post("inputIdUsuario")) == true){
 				//agregando el helper para validar los campos delformulario
 				$this->load->helper("security");
@@ -394,7 +392,7 @@ class Acceso extends MX_Controller {
 											'description' => 'Cambia la contraseña de usuario'),
 							'resetitems' => resetitems()
 							); 			
-	 					$this->load->view('nuevaContrasena', $data);
+	 					$this->load->view('acceso/nuevaContrasena', $data);
 					//redirect(base_url('acceso/recuperarContrasena'));					
 				}else{
 					//obteniendo los datos  que se reciben por post e imprimiendolos
@@ -411,7 +409,7 @@ class Acceso extends MX_Controller {
 						$datos['contrasena'] = $usuario['contrasena'];
 						$cambioOK = $this->libacceso->cambiarContrasena($datos);						
 						$this->session->set_flashdata('msjUsuario', $cambioOK->response);
-						$this->load->view('mensajes');
+						$this->load->view('acceso/mensajes');
 						
 					}else{
 						echo 'se regresa a recuperar contraseña con mensaje de que no son identicas';
@@ -423,7 +421,7 @@ class Acceso extends MX_Controller {
 											'description' => 'Cambia la contraseña de usuario'),
 							'resetitems' => resetitems()
 							); 			
-	 					$this->load->view('nuevaContrasena', $data);
+	 					$this->load->view('acceso/nuevaContrasena', $data);
 
 						//redirect(base_url('acceso/nuevaContrasena'));
 					}			
@@ -434,11 +432,11 @@ class Acceso extends MX_Controller {
 										'description' => 'Recupera la contraseña de usuario'),
 						'resetitems' => resetitems()
 						); 			
- 				//$this->load->view('nuevaContrasena', $data);
+ 				$this->load->view('nuevaContrasena', $data);
 				//redireccionando a la vista para recuperar contraseña
 				$msg='No se recibieron los campos';
 				$this->session->set_flashdata('errorUsuario', $msg);
-				//redirect(base_url('acceso/nuevaContrasena'));
+				redirect(base_url('modacceso/Acceso/nuevaContrasena'));
 			}                        
 
     }//fin de cambiarContraseña

@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>POSMX - Login</title>
+  <title>POSMX - Nueva Contraseña</title>
 
   <!-- Custom fonts for this template-->
   <link href="<?php echo base_url().'assets/' ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,50 +23,41 @@
 
   <div class="container">
     <div class="card card-login mx-auto mt-5">
-      <div class="card-header">Ingresar</div>
+      <div class="card-header">Nueva Contraseña</div>
       <div class="card-body">
         <?php echo validation_errors('<div class="alert alert-danger" role="alert">','</div>')?>
-        <?php echo (!empty($this->session->userdata('errorContrasena')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorContrasena').'</div>':''?>
+        <?php echo (!empty($this->session->userdata('errorUsuario')))?'<div class="alert alert-danger" role="alert">'.$this->session->userdata('errorUsuario').'</div>':'';
+        ?>
+        <?php echo (!empty($this->session->userdata('msjUsuario')))?'<div class="alert alert-success" role="alert">'.$this->session->userdata('msjUsuario').'</div>':''?>
 <!--    
         <form>-->
-        <?php echo form_open(base_url("acceso/login"))?>
+        <?php echo form_open(base_url("modacceso/Acceso/cambiarContrasena"))?>
           <div class="form-group">
-            <div class="form-label-group">
-              <!--
-              <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="required" autofocus="autofocus">
-              <label for="inputEmail">Correo electrónico</label>-->
-              <?php echo form_input($logitems["correo"])?>
-              <?php echo form_label("Correo", "correo")?>
+            <div class="form-label-group">           
+              <?php echo form_input($resetitems["contrasena"])?>
+              <?php echo form_label("Contraseña", "contrasena")?>              
             </div>
           </div>
           <div class="form-group">
             <div class="form-label-group">
-              <!--
-              <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
-              <label for="inputPassword">Contraseña</label>-->
-              <?php echo form_submit($logitems["contrasena"])?>
-              <?php echo form_label("Contraseña", "contrasena")?>
+              <?php echo form_submit($resetitems["contrasena2"])?>
+              <?php echo form_label("Confirmar Contraseña", "contrasena2")?>
             </div>
           </div>
-          <div class="form-group">
-            <div class="checkbox">
-              <label>
-                <!--
-                <input type="checkbox" value="remember-me">-->
-                <?php echo form_input(['type' => 'checkbox', 'value' => 'recuerdame']);?>
-                Rescordar contraseña
-              </label>
-            </div>
-          </div>
+
+          <?php $tmpIdUser = (!empty($this->session->userdata('userId')))?$this->session->userdata('userId'):$this->session->userdata('tokenIdUsuario');?>
+          
+          <?php echo (!empty($tmpIdUser))?'<div class="form-label-group"><div class="form-label-group">'.form_input($resetitems["inputIdUsuario"],$tmpIdUser).'</div></div>':''?>
+
           <!--
           <a class="btn btn-primary btn-block" href="index.html">Ingresar</a>-->          
-          <?php echo form_submit($logitems["ingresar"])?>
+          <?php echo form_submit($resetitems["guardar"])?>
 <!--    
         </form>-->
         <?php echo form_close() ?>
         <div class="text-center">
-          <a class="d-block small mt-3" href="<?php echo base_url('acceso/registro')?>">Registrar una cuenta</a>
-          <a class="d-block small" href="<?php echo base_url('acceso/recuperarContrasena')?>">¿Olvidaste tú contraseña?</a>
+          <a class="d-block small mt-3" href="<?php echo base_url('modacceso/Acceso/registro')?>">Registrar una cuenta</a>
+          <a class="d-block small" href="<?php echo base_url('modacceso/Acceso/recuperarContrasena')?>">¿Olvidaste tú contraseña?</a>
           <a class="d-block small" href="<?php echo base_url()?>">Inicio</a>
         </div>
       </div>
