@@ -275,7 +275,7 @@ class Acceso extends CI_Controller {
 		                				);
 
 						$logginLink = base_url().'modacceso/Acceso/nuevaContrasena/'.$acceso->usuario->id_usuario.'/'.$token->token;
-/*
+
 						$mensaje = '<table>
 									  <caption>Cambia tu contraseña</caption>
 									  <tr>
@@ -297,8 +297,8 @@ class Acceso extends CI_Controller {
 									</table>';
 
 						$this->load->library('Sistema/LibMail');
-		    			$envioExito =$this->libmail->enviarMail($usuario_data['correoElectronico'], 'Cambiar contraseña', $mensaje);*/
-$envioExito=true;
+		    			$envioExito =$this->libmail->enviarMail($usuario_data['correoElectronico'], 'Cambiar contraseña', $mensaje);
+//$envioExito=true;
 		                if($envioExito){
 		                    $msg= "¡Mensaje enviado correctamente!";//"¡Mensaje enviado correctamente!";
 		                }else{
